@@ -1,16 +1,15 @@
 using UnityEngine;
-using UnityEngine.UI; // Untuk menggunakan UI Text dan Button
+using UnityEngine.UI;
 
 public class GameOverDisplay : MonoBehaviour
 {
-    public GameObject gameOverPanel;    // Panel gelap
-    public GameObject gameOverText;     // Teks "Game Over"
-    public GameObject restartButton;    // Tombol restart
-
+    public GameObject gameOverPanel;
+    public GameObject gameOverText;
+    public GameObject restartButton;
+    public Text scoreTotalText; // <- pakai Text UI Legacy
 
     void Start()
     {
-        // Ganti teks pada button saat Start
         Text buttonText = restartButton.GetComponentInChildren<Text>();
         if (buttonText != null)
         {
@@ -20,16 +19,26 @@ public class GameOverDisplay : MonoBehaviour
 
     public void ShowGameOver()
     {
-        gameOverPanel.SetActive(true);     // Tampilkan panel gelap + UI
+        gameOverPanel.SetActive(true);
         gameOverText.SetActive(true);
         restartButton.SetActive(true);
+        scoreTotalText.gameObject.SetActive(true); // tampilkan text
+
+        if (scoreTotalText != null)
+        {
+            int passed = ScoreManager.instance?.score ?? 0;
+            int time = ScoreManager.instance?.survivalTime ?? 0;
+            int total = passed + time;
+
+            scoreTotalText.text = $"Total Score: {total} (Passed: {passed} + Time: {time})";
+        }
     }
 
     public void HideGameOver()
     {
-        gameOverPanel.SetActive(false);    // Sembunyikan panel dan semua isinya
+        gameOverPanel.SetActive(false);
         gameOverText.SetActive(false);
         restartButton.SetActive(false);
+        scoreTotalText.gameObject.SetActive(false); // sembunyikan text
     }
 }
-
